@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Login</title>
+	</head>
+	
+	<body>
+		<form action="/login" method="POST">
+			<h1>Login</h1>
+			<p><input id = "name" type="text" value="" placeholder="name" name="name"></p>
+			<p><input id = "password" type="password" value="" placeholder="password" name="password"></p>
+			<input type="submit" value="Log in">
+		</form>
+		<p><a href="/signup_page">New? Sign up!</a></p>
+		<div>{{data}}</div>
+	</body>
+	
+</html>

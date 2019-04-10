@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>Order Page</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+              $("#LinktoUpdate").click(function(){
+                  var update_number = $("#update_number").val();
+                  alert("update_number:" + $("#update_number").val());
+                  var original_href = $("#LinktoUpdate").attr("href");
+                  $("#LinktoUpdate").attr("href",original_href+update_number.toString());
+              });
+            });
+        </script>
+	</head>
+	
+	<body>
+        <h1 align=center>Order {{order_id}}</h1>
+        <p><a href="/delete_order?order_id={{order_id}}">Delete this order</a></p>
+        <p><a href="/add_product_page?order_id={{order_id}}">Add products to this order</a></p>
+        <p><a href="/order?order_id={{order_id}}">Display products in this order</a></p>
+
+        <br>
+
+        {% if data %}
+        <table align=center  style="border:1px #000000 solid;">
+            <caption><B>Products Of This Order</B></caption>
+            <tr>
+                <td align=center  style="border:1px #000000 solid;">Product_id</td>
+                <td align=center  style="border:1px #000000 solid;">Name</td>
+                <td align=center  style="border:1px #000000 solid;">Price</td>
+                <td align=center  style="border:1px #000000 solid;">Quantity</td>
+                <td align=center  style="border:1px #000000 solid;">Discount</td>
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td name = 'product_id' align=center  style="border:1px #000000 solid;">{{item['product_id']}}</td>
+                    <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['name']}}</td>
+                    <td name = 'price' align=center  style="border:1px #000000 solid;">{{item['price']}}</td>
+                    <td name = 'quantity' align=center  style="border:1px #000000 solid;">{{item['quantity']}}</td>
+                    <td name = 'discount' align=center  style="border:1px #000000 solid;">{{item['discount']}}</td>
+                    <td align=center  style="border:1px #000000 solid;">
+                        <a href="/delete_product?order_id={{order_id}}&product_id={{item['product_id']}}&delete_number={{item['quantity']}}" id="LinktoDelete">Delete product</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <form action="/update_product" method="POST">
+            <div style="float:left;">Change quantity:</div>
+            <div style="float:right;">
+                    {% if total_price %}
+                    Total:{{total_price}}
+                    {% endif %}
+            </div>
+
+            <br>
+
+            <div><input type='hidden' name='order_id' value='{{order_id}}'></div>
+            <div style="float:left;"><input id = "product_id" type="text" value="" placeholder="product_id" name="product_id"></div>
+            <div style="float:left;"><input id = "number_to_update" type="text" value="" placeholder="number_to_update" name="number_to_update"></div>
+            <input type="submit" value="Change quantity">
+		</form>
+
+        {% if string %}
+        <p>{{string}}</p>
+        {% endif %}
+        
+        <p><a href="/customer_main">Back to Customer Main Page</a></p>
+	</body>
+	
+</html>

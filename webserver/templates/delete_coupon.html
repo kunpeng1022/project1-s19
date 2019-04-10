@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>Coupon Page</title>
+
+	</head>
+	
+	<body>
+        
+        {% if data %}
+        <table align=center  style="border:1px #000000 solid;">
+            <caption><B>Delete Coupons</B></caption>
+            <tr>
+                <td align=center  style="border:1px #000000 solid;">coupon_id</td>
+                <td align=center  style="border:1px #000000 solid;">discount</td>
+     
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td name = 'coupon_id' align=center  style="border:1px #000000 solid;">{{item['coupon_id']}}</td>
+                    <td name = 'discount' align=center  style="border:1px #000000 solid;">{{item['discount']}}</td>
+                    
+                    <td align=center  style="border:1px #000000 solid;">
+                        <a href="/delete_coupon_seller?coupon_id={{item['coupon_id']}}" id="LinktoCouponDelete">Delete Coupon</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+
+        
+        
+        <p><a href="/seller_main">Back to Seller's Dashboard</a></p>
+	</body>
+	
+</html>

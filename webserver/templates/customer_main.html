@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Customer Main Page</title>
+	</head>
+	
+	<body>
+        <h1 align=center>Customer Main Page</h1>
+        <p>
+            <form action="/add_order" method="POST">
+                <input type="submit" name = 'submit_button' value="add order">
+            </form>
+        </p>
+        <p><a href="/customer_main">Display all my orders</a></p>
+
+        <br>
+
+
+        {% if data %}
+        <table align=center>
+            <caption><B>My orders</B></caption>
+            <tr>
+                <td align=center>Order_id</td>
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td name = 'order_id' align=center  style="border:1px #000000 solid;">
+                        <a href="/order?order_id={{item}}">{{item}}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </body>
+
+    <p><a href="/logout">Log out</a></p>
+    
+    {% if string %}
+    <p>{{string}}</p>
+    {% endif %}
+	
+</html>

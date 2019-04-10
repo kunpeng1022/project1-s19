@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sign Up</title>
+	</head>
+	
+	<body>
+		<form action="/signup" method="POST">
+			<h1>Sign Up</h1>
+			<p><input id = "name" type="text" value="" placeholder="name" name="name"></p>
+			<p><input id = "password" type="text" value="" placeholder="password" name="password"></p>
+			<p><select name = "gender">
+				<option selected="selected">male</option>
+				<option>female</option>
+				</select>
+			</p>
+			<p><select name = "category">
+				<option selected="selected">customer</option>
+				<option>seller</option>
+				</select>
+			</p>
+			<p><input id = "address" type="text" value="" placeholder="address" name="address"></p>
+			<input type="submit" value="Sign Up" class="signup-button">
+		</form>
+		<p><a href="/login_page">Already a user? Log in!</a></p>
+		<div>{{data}}</div>
+	</body>
+	
+</html>

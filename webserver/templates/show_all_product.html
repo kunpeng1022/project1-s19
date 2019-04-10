@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>Order Page</title>
+	</head>
+	
+	<body>
+        
+        {% if data %}
+        <table align=center  style="border:1px #000000 solid;">
+            <caption><B>Products</B></caption>
+            <tr>
+                <td align=center  style="border:1px #000000 solid;">Product_id</td>
+                <td align=center  style="border:1px #000000 solid;">Name</td>
+                <td align=center  style="border:1px #000000 solid;">Description</td>
+                <td align=center  style="border:1px #000000 solid;">Price</td>
+                <td align=center  style="border:1px #000000 solid;">Quantity</td>
+                <td align=center  style="border:1px #000000 solid;">Discount</td>
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td name = 'product_id' align=center  style="border:1px #000000 solid;">{{item['product_id']}}</td>
+                    <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['name']}}</td>
+                    <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['description']}}</td>
+                    <td name = 'price' align=center  style="border:1px #000000 solid;">{{item['price']}}</td>
+                    <td name = 'quantity' align=center  style="border:1px #000000 solid;">{{item['quantity']}}</td>
+                    <td name = 'discount' align=center  style="border:1px #000000 solid;">{{item['discount']}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+
+        
+        
+        <p><a href="/seller_main">Back to Seller's Dashboard</a></p>
+	</body>
+	
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Add_Coupon</title>
+    </head>
+    
+    <body>
+
+            <h1 align=center>Add New Coupon</h1>
+
+            {% if data %}
+            <table align=center  style="border:1px #000000 solid;">
+                <caption><B>Your Products</B></caption>
+                <tr>
+                    <td align=center  style="border:1px #000000 solid;">Product_id</td>
+                    <td align=center  style="border:1px #000000 solid;">Name</td>
+                    <td align=center  style="border:1px #000000 solid;">Description</td>
+                    <td align=center  style="border:1px #000000 solid;">Price</td>
+                    <td align=center  style="border:1px #000000 solid;">Quantity</td>
+                    <td align=center  style="border:1px #000000 solid;">Discount</td>
+                </tr>
+                {% for item in data %}
+                    <tr>
+                        <td name = 'product_id' align=center  style="border:1px #000000 solid;">{{item['product_id']}}</td>
+                        <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['name']}}</td>
+                        <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['description']}}</td>
+                        <td name = 'price' align=center  style="border:1px #000000 solid;">{{item['price']}}</td>
+                        <td name = 'quantity' align=center  style="border:1px #000000 solid;">{{item['quantity']}}</td>
+                        <td name = 'discount' align=center  style="border:1px #000000 solid;">{{item['discount']}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+    
+            {% endif %}
+
+
+
+        <form action="/add_new_coupon" method="POST">
+            
+            
+            <p><input id = "discount_rate" type="float" value="" placeholder="discount rate" name="discount_rate"></p>
+
+            <p><input id = "product_ids" type="text" value="" placeholder="product_ids" name="product_ids">(Please input the applied product ids separated by ',' or input exactly 'all')</p>
+            
+            <p><input type="submit" value="Add" class="add-button"></p>
+        </form>
+
+        <p><a href="/seller_main">Back to Seller's Dashboard</a></p>
+    </body>
+    
+</html>
+

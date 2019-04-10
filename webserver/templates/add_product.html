@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>Add Product</title>
+	</head>
+	
+	<body>
+        <h1 align=center>Add Product</h1>
+        <p>You are in Order {{order_id}}</p>
+        <p>
+            <form action="/search_product" method="POST">
+                Please enter keywords:
+                <input id = "keyword" type="text" value="" placeholder="keyword" name="keyword">
+                <input type='hidden' name='order_id' value='{{order_id}}'> 
+                <input type="submit" name = 'submit_button' value="search">
+                <input type="submit" name = 'submit_button' value="search all">
+            </form>
+        </p>
+
+        <br><br>
+
+        {% if data %}
+        <table align=center  style="border:1px #000000 solid;">
+            <caption><B>Products</B></caption>
+            <tr>
+                <td align=center  style="border:1px #000000 solid;">Product_id</td>
+                <td align=center  style="border:1px #000000 solid;">Name</td>
+                <td align=center  style="border:1px #000000 solid;">Description</td>
+                <td align=center  style="border:1px #000000 solid;">Price</td>
+                <td align=center  style="border:1px #000000 solid;">Quantity Left</td>
+                <td align=center  style="border:1px #000000 solid;">Discount</td>
+            </tr>
+            {% for item in data %}
+                <tr>
+                    <td name = 'product_id' align=center  style="border:1px #000000 solid;">{{item['product_id']}}</td>
+                    <td name = 'name' align=center  style="border:1px #000000 solid;">{{item['name']}}</td>
+                    <td name = 'description' align=center  style="border:1px #000000 solid;">{{item['description']}}</td>
+                    <td name = 'price' align=center  style="border:1px #000000 solid;">{{item['price']}}</td>
+                    <td name = 'quantity' align=center  style="border:1px #000000 solid;">{{item['quantity']}}</td>
+                    <td name = 'discount' align=center  style="border:1px #000000 solid;">{{item['discount']}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <form action="/add_product" method="POST">
+            <p>Add product:</p>
+            <p><input type='hidden' name='order_id' value='{{order_id}}'></p>
+			<p><input id = "product_id" type="text" value="" placeholder="product_id" name="product_id"></p>
+			<p><input id = "number_to_add" type="text" value="" placeholder="number_to_add" name="number_to_add"></p>
+			<p><input type="submit" value="Add product"></p>
+		</form>
+
+        {% if string %}
+        <p>{{string}}</p>
+        {% endif %}
+
+        <p><a href="/order?order_id={{order_id}}">Back to Order {{order_id}}</a></p>
+	</body>
+	
+</html>
