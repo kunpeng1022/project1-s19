@@ -559,9 +559,8 @@ def search_product():
             row['discount'] = discount
             result.append(row)
         
-        context = dict(data = result)
-        
-        return render_template('add_product.html', **context, order_id = order_id)
+        #context = dict(data = result)
+        return render_template('add_product.html', data = result, order_id = order_id)
     
     # search all
     elif request.form['submit_button'] == 'search all' or (request.form['submit_button'] == 'search' and (not request.form['keyword'])):
@@ -604,9 +603,9 @@ def search_product():
             row['discount'] = discount
             result.append(row)
         
-        context = dict(data = result)
+        #context = dict(data = result)
         
-        return render_template('add_product.html', **context, order_id = order_id)
+        return render_template('add_product.html', data = result, order_id = order_id)
 
 
 
