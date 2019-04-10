@@ -1,19 +1,4 @@
-#!/Users/panzichen/anaconda3/bin python3.7
-
-"""
-Columbia W4111 Intro to databases
-Example webserver
-
-To run locally
-
-    python server.py
-
-Go to http://localhost:8111 in your browser
-
-
-A debugger such as "pdb" may be helpful for debugging.
-Read about it online.
-"""
+#!/Users/panzichen/anaconda2/bin python2.7
 
 import os
 from sqlalchemy import *
@@ -35,13 +20,7 @@ engine = create_engine(DATABASEURI)
 
 @app.before_request
 def before_request():
-  """
-  This function is run at the beginning of every web request 
-  (every time you enter an address in the web browser).
-  We use it to setup a database connection that can be used throughout the request
 
-  The variable g is globally accessible
-  """
   try:
     g.conn = engine.connect()
   except:
@@ -51,10 +30,7 @@ def before_request():
 
 @app.teardown_request
 def teardown_request(exception):
-  """
-  At the end of the web request, this makes sure to close the database connection.
-  If you don't the database could run out of memory!
-  """
+
   try:
     g.conn.close()
   except Exception as e:
@@ -70,58 +46,19 @@ def index():
         session.pop('password', None)
         session.pop('category', None)
     return redirect(url_for('login_page'))
-    
-    '''
-  """
-  request is a special object that Flask provides to access web request information:
 
-  request.method:   "GET" or "POST"
-  request.form:     if the browser submitted a form, this contains the data in the form
-  request.args:     dictionary of URL arguments e.g., {a:1, b:2} for http://localhost?a=1&b=2
-
-  See its API: http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
-  """
-  print (request.args)
-  
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
-  for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
-  cursor.close()
-
-  context = dict(data = names)
-
-  return render_template("index.html", **context)
-  '''
-
-
-'''
-@app.route('/another')
-def another():
-  return render_template("anotherfile.html")
-
-
-# Example of adding new data to the database
-@app.route('/add', methods=['POST'])
-def add():
-  name = request.form['name']
-  print (name)
-  cmd = 'INSERT INTO test(name) VALUES (:name1), (:name2)';
-  g.conn.execute(text(cmd), name1 = name, name2 = name);
-  return redirect('/')
-'''
 
 # Signup Code
 
-@app.route('/signup_page')
+@app.route('/signup_page', methods=['POST', 'GET'])
 def signup_page():
     return render_template('signup.html')
 
-@app.route('/signup_success')
+@app.route('/signup_success', methods=['POST', 'GET'])
 def signup_success():
     return render_template('signup_success.html')
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
     input_name = str(request.form['name'])
     input_gender = str(request.form['gender'])
@@ -172,11 +109,11 @@ def signup():
         
 # Login Code
 
-@app.route('/login_page')
+@app.route('/login_page', methods=['POST', 'GET'])
 def login_page():
     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     input_name = str(request.form['name'])
     input_password = str(request.form['password'])
@@ -238,7 +175,7 @@ def logout():
 
 # Customer Code
    
-@app.route('/customer_main')
+@app.route('/customer_main', methods=['POST', 'GET'])
 def customer_main():
     
     # search for orders belonging to the customer
@@ -256,7 +193,7 @@ def customer_main():
     return render_template('customer_main.html', **context)
     
 
-@app.route('/add_order', methods=['POST'])
+@app.route('/add_order', methods=['POST', 'GET'])
 def add_order():
     
     # generate order_id
@@ -335,10 +272,12 @@ def order():
     for item in data:
         
         row = {}
-            
-        cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item['product_id']))
+        
+        cmd = "SELECT coupons.discount \
+                FROM coupon_applied, coupons \
+                WHERE coupon_applied.product_id = (:pid) AND \
+                    coupon_applied.coupon_id = coupons.coupon_id"
+        cursor = g.conn.execute(text(cmd), pid = item['product_id'])
         coupon_info = cursor.fetchall()
         cursor.close()
             
@@ -373,13 +312,13 @@ def order():
     return render_template('order.html', data = result, order_id = order_id, total_price = total_price) 
 
 
-@app.route('/add_product_page')
+@app.route('/add_product_page', methods=['POST', 'GET'])
 def add_product_page():
     order_id = request.args.get('order_id')
     return render_template('add_product.html', order_id = order_id)
 
 
-@app.route('/order_page')
+@app.route('/order_page', methods=['POST', 'GET'])
 def order_page():
     return render_template('order.html')
 
@@ -595,9 +534,11 @@ def search_product():
             
             row = {}
             
-            cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item[0]))
+            cmd = "SELECT coupons.discount \
+                    FROM coupon_applied, coupons \
+                    WHERE coupon_applied.product_id = (:item0) AND \
+                        coupon_applied.coupon_id = coupons.coupon_id"
+            cursor = g.conn.execute(text(cmd), item0 = item[0])
             coupon_info = cursor.fetchall()
             cursor.close()
             
@@ -638,9 +579,11 @@ def search_product():
             
             row = {}
             
-            cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item[0]))
+            cmd = "SELECT coupons.discount \
+                    FROM coupon_applied, coupons \
+                    WHERE coupon_applied.product_id = (:item0) AND \
+                    coupon_applied.coupon_id = coupons.coupon_id"
+            cursor = g.conn.execute(text(cmd), item0 = item[0])
             coupon_info = cursor.fetchall()
             cursor.close()
             
@@ -719,9 +662,11 @@ def add_new_coupon_page():
 
         row = {}
         
-        cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item['product_id']))
+        cmd = "SELECT coupons.discount \
+                FROM coupon_applied, coupons \
+                WHERE coupon_applied.product_id = (:pid) AND \
+                coupon_applied.coupon_id = coupons.coupon_id"
+        cursor = g.conn.execute(text(cmd), pid = item['product_id'])
         coupon_info = cursor.fetchall()
         cursor.close()
             
@@ -866,9 +811,11 @@ def see_my_inventory():
 
         row = {}
         
-        cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item['product_id']))
+        cmd = "SELECT coupons.discount \
+                FROM coupon_applied, coupons \
+                WHERE coupon_applied.product_id = (:pid) AND \
+                coupon_applied.coupon_id = coupons.coupon_id"
+        cursor = g.conn.execute(text(cmd), pid = item['product_id'])
         coupon_info = cursor.fetchall()
         cursor.close()
             
@@ -1054,9 +1001,11 @@ def delete_coupon_from_products_page():
 
         row = {}
         
-        cursor = g.conn.execute("SELECT coupons.discount \
-                                    FROM coupon_applied, coupons \
-                                    WHERE coupon_applied.product_id = '{}' and coupon_applied.coupon_id = coupons.coupon_id".format(item['product_id']))
+        cmd = "SELECT coupons.discount \
+                FROM coupon_applied, coupons \
+                WHERE coupon_applied.product_id = (:pid) AND \
+                coupon_applied.coupon_id = coupons.coupon_id"
+        cursor = g.conn.execute(text(cmd), pid = item['product_id'])
         coupon_info = cursor.fetchall()
         cursor.close()
             
@@ -1122,18 +1071,6 @@ if __name__ == "__main__":
   @click.argument('HOST', default='0.0.0.0')
   @click.argument('PORT', default=8111, type=int)
   def run(debug, threaded, host, port):
-    """
-    This function handles command line parameters.
-    Run the server using
-
-        python server.py
-
-    Show the help text using
-
-        python server.py --help
-
-    """
-
     HOST, PORT = host, port
     print ("running on %s:%d" % (HOST, PORT))
     app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
